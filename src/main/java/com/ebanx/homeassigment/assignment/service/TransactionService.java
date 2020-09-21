@@ -2,7 +2,7 @@ package com.ebanx.homeassigment.assignment.service;
 
 import com.ebanx.homeassigment.assignment.exceptions.AccountNotFoundException;
 import com.ebanx.homeassigment.assignment.model.Account;
-import com.ebanx.homeassigment.assignment.model.Event;
+import com.ebanx.homeassigment.assignment.model.request.EventDTO;
 import com.ebanx.homeassigment.assignment.model.response.DepositResponse;
 import com.ebanx.homeassigment.assignment.model.response.TransferResponse;
 import com.ebanx.homeassigment.assignment.model.response.WithdrawResponse;
@@ -21,7 +21,7 @@ public class TransactionService {
         allAcounts.clear();
     }
 
-    public DepositResponse deposit(Event event) {
+    public DepositResponse deposit(EventDTO event) {
         Account account = findAccount(event.getDestination())
                 .map( acc -> {
                     acc.setAmount(acc.getAmount() + event.getAmount());
@@ -42,7 +42,7 @@ public class TransactionService {
                 .map(Map.Entry::getValue);
     }
 
-    public TransferResponse transfer(Event event) {
+    public TransferResponse transfer(EventDTO event) {
         Account origin = findAccount(event.getOrigin())
                 .orElseThrow(AccountNotFoundException::new);
         Account destination = findAccount(event.getDestination())
@@ -50,13 +50,12 @@ public class TransactionService {
 
         origin.setAmount(origin.getAmount() - event.getAmount());
         destination.setAmount(event.getAmount() + destination.getAmount());
-
         allAcounts.put(destination.getId(), destination);
 
         return new TransferResponse(origin, destination);
     }
 
-    public WithdrawResponse withDraw(Event event) {
+    public WithdrawResponse withDraw(EventDTO event) {
         Account account = findAccount(event.getOrigin())
                 .map( acc -> {
                     acc.setAmount(acc.getAmount() - event.getAmount());

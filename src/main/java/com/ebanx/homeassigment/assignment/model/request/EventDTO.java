@@ -1,8 +1,8 @@
-package com.ebanx.homeassigment.assignment.model;
+package com.ebanx.homeassigment.assignment.model.request;
 
 import com.ebanx.homeassigment.assignment.enums.Action;
 
-public class Event {
+public class EventDTO {
 
     private Action type;
 
@@ -44,6 +44,13 @@ public class Event {
         this.amount = amount;
     }
 
-    public Event() {
+    public EventDTO() {
+    }
+
+    public EventDTO(Action type, String origin, String destination, Integer amount) {
+        this.type = type;
+        this.origin = origin;
+        this.destination = destination;
+        this.amount = amount;
     }
 }

@@ -1,6 +1,6 @@
 package com.ebanx.homeassigment.assignment.model;
 
-import com.ebanx.homeassigment.assignment.enums.Action;
+import com.ebanx.homeassigment.assignment.model.request.EventDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
@@ -15,7 +15,7 @@ public class EventTest {
 
     @Test
     public void shouldDeserializeDeposit() throws JsonProcessingException {
-        Event event = objectMapper.readValue("{\"type\":\"deposit\", \"destination\":\"100\", \"amount\":10}", Event.class);
+        EventDTO event = objectMapper.readValue("{\"type\":\"deposit\", \"destination\":\"100\", \"amount\":10}", EventDTO.class);
 
         assertEquals(Integer.valueOf(10), event.getAmount());
         assertEquals("100", event.getDestination());
@@ -25,7 +25,7 @@ public class EventTest {
 
     @Test
     public void shouldDeserializeWithDraw() throws JsonProcessingException {
-        Event event = objectMapper.readValue("{\"type\":\"withdraw\", \"origin\":\"100\", \"amount\":10}", Event.class);
+        EventDTO event = objectMapper.readValue("{\"type\":\"withdraw\", \"origin\":\"100\", \"amount\":10}", EventDTO.class);
 
         assertEquals(Integer.valueOf(10), event.getAmount());
         assertEquals("100", event.getOrigin());
@@ -35,7 +35,7 @@ public class EventTest {
 
     @Test
     public void shouldDeserializeTransfer() throws JsonProcessingException {
-        Event event = objectMapper.readValue("{\"type\":\"transfer\", \"origin\":\"100\", \"amount\":15, \"destination\":\"300\"}", Event.class);
+        EventDTO event = objectMapper.readValue("{\"type\":\"transfer\", \"origin\":\"100\", \"amount\":15, \"destination\":\"300\"}", EventDTO.class);
 
         assertEquals(Integer.valueOf(15), event.getAmount());
         assertEquals("100", event.getOrigin());

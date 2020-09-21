@@ -16,8 +16,4 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return ResponseEntity.status(NOT_FOUND).body(0);
     }
 
-    @ExceptionHandler(value = { NotEnoughAmountException.class })
-    protected ResponseEntity<Object> handleNotEnoughAmountException(RuntimeException ex, WebRequest request) {
-        return ResponseEntity.status(NOT_FOUND).body(0);
-    }
 }

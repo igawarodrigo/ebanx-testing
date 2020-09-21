@@ -1,7 +1,6 @@
 package com.ebanx.homeassigment.assignment.service;
 
 import com.ebanx.homeassigment.assignment.exceptions.AccountNotFoundException;
-import com.ebanx.homeassigment.assignment.exceptions.NotEnoughAmountException;
 import com.ebanx.homeassigment.assignment.model.Account;
 import com.ebanx.homeassigment.assignment.model.Event;
 import com.ebanx.homeassigment.assignment.model.response.DepositResponse;
@@ -49,10 +48,6 @@ public class TransactionService {
         Account destination = findAccount(event.getDestination())
                 .orElseGet(() -> new Account(event.getDestination(), 0));
 
-        if (origin.getAmount() < event.getAmount()) {
-            throw new NotEnoughAmountException();
-        }
-
         origin.setAmount(origin.getAmount() - event.getAmount());
         destination.setAmount(event.getAmount() + destination.getAmount());
 
@@ -62,13 +57,12 @@ public class TransactionService {
     }
 
     public WithdrawResponse withDraw(Event event) {
-        Account account = findAccount(event.getOrigin()).orElseThrow(AccountNotFoundException::new);
-
-        if (account.getAmount() > event.getAmount()) {
-            account.setAmount(account.getAmount() - event.getAmount());
-        } else {
-            throw new NotEnoughAmountException();
-        }
+        Account account = findAccount(event.getOrigin())
+                .map( acc -> {
+                    acc.setAmount(acc.getAmount() - event.getAmount());
+                    return acc;
+                })
+                .orElseThrow(AccountNotFoundException::new);
 
         return new WithdrawResponse(account);
     }
